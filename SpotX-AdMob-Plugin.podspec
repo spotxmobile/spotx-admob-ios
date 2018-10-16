@@ -10,15 +10,16 @@ Pod::Spec.new do |s|
   s.version          = '4.1.0'
   s.name             = 'SpotX-AdMob-Plugin'
   s.summary          = 'AdMob plugin for SpotXchange'
-  s.authors          = 'SpotXchange, Inc.'
-  s.homepage         = 'http://www.spotxchange.com'
+  s.authors          = 'SpotX, Inc.'
+  s.homepage         = 'https://www.spotx.tv'
   s.source           = { :git => 'https://github.com/spotxmobile/spotx-admob-ios.git', tag: '4.1.0' }
+  s.preserve_paths   = [ 'SpotXAdMobPlugin.framework' ]
   s.license          =  'MIT'
   s.platform         = :ios, '9.0'
   s.requires_arc     = true
 
   s.source_files  = 'Classes/*.{h,m}'
 
-  s.dependency 'Google-Mobile-Ads-SDK'
   s.dependency 'SpotX-SDK'
+  s.dependency 'Google-Mobile-Ads-SDK'
 end

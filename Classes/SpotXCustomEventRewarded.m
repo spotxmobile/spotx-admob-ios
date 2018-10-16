@@ -52,6 +52,12 @@ static NSString *const customEventErrorDomain = @"tv.spotx.SpotXCustomEventRewar
 }
 
 - (void)setUp {
+  id<GADMRewardBasedVideoAdNetworkConnector> strongConnector = self.rewardBasedVideoAdConnector;
+  id<GADMRewardBasedVideoAdNetworkAdapter> strongAdapter = self;
+  [strongConnector adapterDidSetUpRewardBasedVideoAd:strongAdapter];
+}
+
+- (void)requestRewardBasedVideoAd {
   // The String "parameter" here is actually the value of the extern GADCustomEventParametersServer coming
   // from the Google AdMob Framework, but we can't use it because they didn't create the Framework properly :(
   NSString *serverParameter = [self.rewardBasedVideoAdConnector.credentials objectForKey:@"parameter"];
@@ -83,7 +89,7 @@ static NSString *const customEventErrorDomain = @"tv.spotx.SpotXCustomEventRewar
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey : description, NSLocalizedFailureReasonErrorKey : description};
       error = [NSError errorWithDomain:customEventErrorDomain code:0 userInfo:userInfo];
     }
-
+    
     self.rewardAmount = rewardDict[@"amount"];
     if (![self.rewardAmount isKindOfClass:[NSNumber class]]) {
       NSString *description = @"amount not found within the reward JSON";
@@ -137,16 +143,10 @@ static NSString *const customEventErrorDomain = @"tv.spotx.SpotXCustomEventRewar
   
   if (error) {
     // Couldn't parse the JSON, definitely an error that we need to fix in the configuration
-    [self.rewardBasedVideoAdConnector adapter:self didFailToSetUpRewardBasedVideoAdWithError:error];
+    [self.rewardBasedVideoAdConnector adapter:self didFailToLoadRewardBasedVideoAdwithError:error];
     return;
   }
   
-  id<GADMRewardBasedVideoAdNetworkConnector> strongConnector = self.rewardBasedVideoAdConnector;
-  id<GADMRewardBasedVideoAdNetworkAdapter> strongAdapter = self;
-  [strongConnector adapterDidSetUpRewardBasedVideoAd:strongAdapter];
-}
-
-- (void)requestRewardBasedVideoAd {
   self.interstitial = [[SpotXInterstitialAdPlayer alloc] init];
   self.interstitial.delegate = self;
   [SpotX debugMode:self.rewardBasedVideoAdConnector.testMode];
